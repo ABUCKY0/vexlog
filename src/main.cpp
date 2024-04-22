@@ -43,6 +43,36 @@ void initialize() {
 
 	// Passing in an int
 	logger.log(INFO, 42);
+
+	// Passing in a double
+	logger.log(INFO, 3.14159);
+
+	// Passing in a char
+	logger.log(INFO, 'A');
+
+	// Passing in a string
+	logger.log(INFO, "Hello, World!");
+
+	// Passing in a float
+	logger.log(INFO, 3.14f);
+
+	// Passing in a bool
+	logger.log(INFO, true);
+
+	// Passing in a long
+	logger.log(INFO, 1234567890);
+
+	// Passing in a long long
+	logger.log(INFO, 1234567890123456789);
+
+	// Passing in a long double
+	logger.log(INFO, 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337L);
+
+	// Passing in a std::string
+	logger.log(INFO, std::string("Hello, World!"));
+
+	// Testing no-level log
+	logger.log(std::string("Hello from " + std::string(__FILE__) + " initalize() but without a default level"));
 }
 
 /**

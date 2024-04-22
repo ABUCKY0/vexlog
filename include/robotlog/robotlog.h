@@ -10,7 +10,7 @@
 
 #include "api.h"          // Include PROS API header
 #include "pros/rtos.hpp"  // Include PROS RTOS header for Mutex and Task
-
+#include "colors.h"
 namespace LOG {
 
 enum Level {
@@ -25,8 +25,10 @@ class RobotLOG {
   pros::Mutex queueMutex;
   std::queue<std::string> logQueue;
   std::ofstream logStream;
-  std::atomic<bool> running{true};  // Atomic flag for thread-safe access
+  std::atomic<bool> running{true}; 
   pros::Task worker;
+  std::atomic<bool> logstofile{false}; 
+  std::atomic<Level> logLevel{INFO};  
 
   // Background task function for processing log messages
   static void taskEntry(void *param) {
@@ -46,8 +48,11 @@ class RobotLOG {
         }
       }
       if (!toLog.empty()) {
-        logStream << toLog << std::endl;
-        logStream.flush();  // Flush the stream to ensure that the message is written to the file
+        if (logstofile) {
+          logStream << toLog << std::endl;
+          logStream.flush();  // Flush the stream to ensure that the message is
+                              // written to the file
+        }
         // Print the message to console
         std::cout << toLog << std::endl;
       }
@@ -58,19 +63,22 @@ class RobotLOG {
   static std::string levelToString(Level level) {
     switch (level) {
       case DEBUG:
-        return "DEBUG";
+        return Colors::GREEN + "DEBUG" + Colors::RESET;
       case INFO:
-        return "INFO";
+        return Colors::WHITE + "INFO" + Colors::RESET;
       case WARNING:
-        return "WARN";
+        return Colors::YELLOW + "WARN" + Colors::RESET;
       case ERROR:
-        return "ERR";
+        return Colors::RED + "ERR" + Colors::RESET;
       default:
         return "UNKNOWN";
     }
   }
 
  public:
+  // No-arg constructor
+  RobotLOG() : worker(&RobotLOG::taskEntry, this) { logstofile = false; }
+
   // Constructor
   RobotLOG(const std::string &logFile)
       : logStream(logFile, std::ios::app), worker(&RobotLOG::taskEntry, this) {}
@@ -80,12 +88,27 @@ class RobotLOG {
     shutdown();  // Ensure proper shutdown when object is destroyed
   }
 
+  void disableFileLogging() { logstofile = false; }
+
+  void enableFileLogging() { logstofile = true; }
+
   // Log method
   template <typename T>
   void log(Level level, const T &message) {
     std::lock_guard<pros::Mutex> lock(queueMutex);
     std::ostringstream oss;
-    oss << pros::micros() << "μs - [" << levelToString(level) << "] " << message;
+    oss << pros::micros() << "μs - [" << levelToString(level) << "] "
+        << message;
+    logQueue.push(oss.str());
+  }
+
+  // Log method
+  template <typename T>
+  void log( const T &message) {
+    std::lock_guard<pros::Mutex> lock(queueMutex);
+    std::ostringstream oss;
+    oss << pros::micros() << "μs - [" << levelToString(INFO) << "] "
+        << message;
     logQueue.push(oss.str());
   }
 
