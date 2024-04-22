@@ -2,6 +2,7 @@
 #include "robotlog/robotlog.h"
 
 using namespace LOG;
+using namespace std;
 RobotLOG logger("logger.txt");
 /**
  * A callback function for LLEMU's center button.
@@ -30,8 +31,18 @@ void initialize() {
 	pros::lcd::set_text(1, "Hello PROS User!");
 
 	pros::lcd::register_btn1_cb(on_center_button);
-	std::string logtxt = "Hello from" + std::string(__FILE__) + " initalize()";
-	logger.log(INFO, logtxt);
+	logger.log(INFO, std::string("Hello from " + std::string(__FILE__) + " initalize()"));
+	pros::delay(10);
+	logger.log(INFO, std::string("Hello from " + std::string(__FILE__) + " initalize() after 10s delay"));
+
+	// test the logger
+	logger.log(DEBUG, "Debug message");
+	logger.log(INFO, "Info message");
+	logger.log(WARNING, "Warning message");
+	logger.log(ERROR, "Error message");
+
+	// Passing in an int
+	logger.log(INFO, 42);
 }
 
 /**

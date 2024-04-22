@@ -85,7 +85,7 @@ class RobotLOG {
   void log(Level level, const T &message) {
     std::lock_guard<pros::Mutex> lock(queueMutex);
     std::ostringstream oss;
-    oss << pros::micros << "μs - [" << levelToString(level) << "] " << message;
+    oss << pros::micros() << "μs - [" << levelToString(level) << "] " << message;
     logQueue.push(oss.str());
   }
 
