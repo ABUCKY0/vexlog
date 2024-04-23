@@ -14,55 +14,57 @@
 namespace LOG {
 
 enum Level {
-  DEBUG,
-  INFO,
-  WARNING,
-  ERROR,
+  DEBUG,    // Detailed information, typically of interest only when diagnosing
+            // problems.
+  INFO,     // Program Information.
+  WARNING,  // Used in User Programs for if something unexpected but recoverable
+            // happened
+  ERROR,  // Useful for if the user program cannot recover, such as a sensor not
+          // being found
 };
 
 class RobotLOG {
  private:
-  pros::Mutex queueMutex;
-  std::queue<std::string> logQueue;
-  std::string logFILE;
-  std::atomic<bool> running{true};
-  pros::Task worker;
-  std::atomic<bool> logstofile{false};
-  std::atomic<Level> logLevel{INFO};
+  // pros::Mutex queueMutex;
+  // std::queue<std::string> logQueue;
+  // std::string logFILE;
+  // std::atomic<bool> running{true};
+  // pros::Task worker;
+  // std::atomic<bool> logstofile{false};
+  // std::atomic<Level> logLevel{INFO};
 
-  // Background task function for processing log messages
+  std::atomic<bool> isTakingNewLogs{
+      true};  // replaces running. I still want to finish flusing out the logs
+              // before stopping
+  std::atomic<bool> logstofile{false};
+  std::string logFilePath;
+  std::ofstream logFile;
+  std::queue<std::string> logQueue;  // queue of logs to be written to file
+  pros::Mutex logMutex;              // mutex to protect the queue
+  pros::Task worker;                 // task to write logs to file
+  /*
+   * Logging Level is as Follows:
+   * DEBUG: Detailed information, typically of interest only when diagnosing
+   * problems. Level 0 INFO: Program Information. Level 1 WARN: Used in User
+   * Programs for if something unexpected but recoverable happened ERROR: Useful
+   * for if the user program cannot recover, such as a sensor not being found
+   */
+  std::atomic<Level> loggingLevel{INFO};  // minimum level to log
+
+  /**
+   * @brief Entry point for the background task that writes logs to the file
+   * @param param Pointer to the RobotLOG object
+  */
   static void taskEntry(void *param) {
     RobotLOG *logger = static_cast<RobotLOG *>(param);
     logger->processLogs();
   }
 
-  // Actual task function to process log messages
+  /**
+   * @brief Processes the logs in the queue and writes them to the file
+  */
   void processLogs() {
-    while (running) {
-      std::string toLog;
-      {
-        std::lock_guard<pros::Mutex> lock(queueMutex);
-        if (!logQueue.empty()) {
-          toLog = logQueue.front();
-          logQueue.pop();
-        }
-      }
-      if (!toLog.empty()) {
-        if (logstofile) {
-          FILE* outlogFILE = fopen((this->logFILE).c_str(), "a");
-          if (outlogFILE != NULL) {
-            fprintf(outlogFILE, "%s\n", toLog.c_str());
-            fflush(outlogFILE);
-            fclose(outlogFILE);
-          } else {
-            std::cerr << "Failed to open log file" << std::endl;
-          }
-        }
-        // Print the message to console
-        std::cout << toLog << std::endl;
-      }
-      pros::delay(5);  // Add a small delay to avoid tight looping
-    }
+    
   }
 
   static std::string levelToString(Level level) {
@@ -100,22 +102,11 @@ class RobotLOG {
 
   // Log method
   template <typename T>
-  void log(Level level, const T &message) {
-    std::lock_guard<pros::Mutex> lock(queueMutex);
-    std::ostringstream oss;
-    oss << pros::micros() << "μs - [" << levelToString(level) << "] "
-        << message;
-    logQueue.push(oss.str());
-  }
+  void log(Level level, const T &message) {}
 
   // Log method
   template <typename T>
-  void log(const T &message) {
-    std::lock_guard<pros::Mutex> lock(queueMutex);
-    std::ostringstream oss;
-    oss << pros::micros() << "μs - [" << levelToString(INFO) << "] " << message;
-    logQueue.push(oss.str());
-  }
+  void log(const T &message) {}
 
   // Shutdown method
   void shutdown() {
