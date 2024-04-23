@@ -61,7 +61,7 @@ class RobotLOG {
         // Print the message to console
         std::cout << toLog << std::endl;
       }
-      pros::delay(10);  // Add a small delay to avoid tight looping
+      pros::delay(5);  // Add a small delay to avoid tight looping
     }
   }
 

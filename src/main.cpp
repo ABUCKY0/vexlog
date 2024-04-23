@@ -1,4 +1,7 @@
 #include "main.h"
+
+#include <chrono>
+
 #include "robotlog/robotlog.h"
 
 using namespace LOG;
@@ -11,13 +14,13 @@ RobotLOG logger("logger.txt");
  * "I was pressed!" and nothing.
  */
 void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-	} else {
-		pros::lcd::clear_line(2);
-	}
+  static bool pressed = false;
+  pressed = !pressed;
+  if (pressed) {
+    pros::lcd::set_text(2, "I was pressed!");
+  } else {
+    pros::lcd::clear_line(2);
+  }
 }
 
 /**
@@ -27,52 +30,78 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
+  pros::lcd::initialize();
+  pros::lcd::set_text(1, "Hello PROS User!");
 
-	pros::lcd::register_btn1_cb(on_center_button);
-	logger.log(INFO, std::string("Hello from " + std::string(__FILE__) + " initalize()"));
-	pros::delay(10);
-	logger.log(INFO, std::string("Hello from " + std::string(__FILE__) + " initalize() after 10s delay"));
+  pros::lcd::register_btn1_cb(on_center_button);
+  logger.log(INFO, std::string("Hello from " + std::string(__FILE__) +
+                               " initalize()"));
+  pros::delay(10);
+  logger.log(INFO, std::string("Hello from " + std::string(__FILE__) +
+                               " initalize() after 10s delay"));
 
-	// test the logger
-	logger.log(DEBUG, "Debug message");
-	logger.log(INFO, "Info message");
-	logger.log(WARNING, "Warning message");
-	logger.log(ERROR, "Error message");
+  // test the logger
+  logger.log(DEBUG, "Debug message");
+  logger.log(INFO, "Info message");
+  logger.log(WARNING, "Warning message");
+  logger.log(ERROR, "Error message");
 
-	// Passing in an int
-	logger.log(INFO, 42);
+  // Passing in an int
+  logger.log(INFO, 42);
 
-	// Passing in a double
-	logger.log(INFO, 3.14159);
+  // Passing in a double
+  logger.log(INFO, 3.14159);
 
-	// Passing in a char
-	logger.log(INFO, 'A');
+  // Passing in a char
+  logger.log(INFO, 'A');
 
-	// Passing in a string
+  // Passing in a string
+  logger.log(INFO, "Hello, World!");
+
+  // Passing in a float
+  logger.log(INFO, 3.14f);
+
+  // Passing in a bool
+  logger.log(INFO, true);
+
+  // Passing in a long
+  logger.log(INFO, 1234567890);
+
+  // Passing in a long long
+  logger.log(INFO, 1234567890123456789);
+
+  // Passing in a long double
+  logger.log(
+      INFO,
+      3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337L);
+
+  // Passing in a std::string
+  logger.log(INFO, std::string("Hello, World!"));
+
+  // Testing no-level log
+  logger.log(std::string("Hello from " + std::string(__FILE__) +
+                         " initalize() but without a default level"));
+
+  // Timing Test
+  // Timing COUT
+  for (int i = 0; i < 1000; i++) {
+    auto start = chrono::high_resolution_clock::now();
+    cout << "Hello, World!" << endl;
+    auto end = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
+    logger.log(INFO,
+               "COUT Time: " + to_string(duration.count()) + " microseconds");
+  }
+
+  // Timing Logger
+  for (int i = 0; i < 1000; i++) {
+	auto start = chrono::high_resolution_clock::now();
 	logger.log(INFO, "Hello, World!");
-
-	// Passing in a float
-	logger.log(INFO, 3.14f);
-
-	// Passing in a bool
-	logger.log(INFO, true);
-
-	// Passing in a long
-	logger.log(INFO, 1234567890);
-
-	// Passing in a long long
-	logger.log(INFO, 1234567890123456789);
-
-	// Passing in a long double
-	logger.log(INFO, 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337L);
-
-	// Passing in a std::string
-	logger.log(INFO, std::string("Hello, World!"));
-
-	// Testing no-level log
-	logger.log(std::string("Hello from " + std::string(__FILE__) + " initalize() but without a default level"));
+	auto end = chrono::high_resolution_clock::now();
+	auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
+	logger.log(INFO,
+			   "Logger Time: " + to_string(duration.count()) + " microseconds");
+  }
 }
 
 /**
@@ -120,20 +149,21 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
+  pros::Controller master(pros::E_CONTROLLER_MASTER);
+  pros::Motor left_mtr(1);
+  pros::Motor right_mtr(2);
 
-	while (true) {
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-		int left = master.get_analog(ANALOG_LEFT_Y);
-		int right = master.get_analog(ANALOG_RIGHT_Y);
+  while (true) {
+    pros::lcd::print(0, "%d %d %d",
+                     (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
+                     (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
+                     (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
+    int left = master.get_analog(ANALOG_LEFT_Y);
+    int right = master.get_analog(ANALOG_RIGHT_Y);
 
-		left_mtr = left;
-		right_mtr = right;
+    left_mtr = left;
+    right_mtr = right;
 
-		pros::delay(20);
-	}
+    pros::delay(20);
+  }
 }
