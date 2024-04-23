@@ -19,10 +19,10 @@ RobotLOG logger("out.txt"); // can be any extension or name, but txt is convenie
 
 To log (since that's kind of the whole purpose of this) you can use 
 ```cpp
-log(message);
+log(level, message);
 
 //or
 
-log(message);
+log(message); // Defaults to INFO
 ```
 
