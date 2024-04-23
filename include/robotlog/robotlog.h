@@ -8,9 +8,9 @@
 #include <sstream>  // For std::ostringstream
 #include <string>   // For std::string
 
-#include "api.h"          // Include PROS API header
-#include "pros/rtos.hpp"  // Include PROS RTOS header for Mutex and Task
+#include "api.h"  // Include PROS API header
 #include "colors.h"
+#include "pros/rtos.hpp"  // Include PROS RTOS header for Mutex and Task
 namespace LOG {
 
 enum Level {
@@ -24,11 +24,11 @@ class RobotLOG {
  private:
   pros::Mutex queueMutex;
   std::queue<std::string> logQueue;
-  std::ofstream logStream;
-  std::atomic<bool> running{true}; 
+  std::string logFILE;
+  std::atomic<bool> running{true};
   pros::Task worker;
-  std::atomic<bool> logstofile{false}; 
-  std::atomic<Level> logLevel{INFO};  
+  std::atomic<bool> logstofile{false};
+  std::atomic<Level> logLevel{INFO};
 
   // Background task function for processing log messages
   static void taskEntry(void *param) {
@@ -49,9 +49,14 @@ class RobotLOG {
       }
       if (!toLog.empty()) {
         if (logstofile) {
-          logStream << toLog << std::endl;
-          logStream.flush();  // Flush the stream to ensure that the message is
-                              // written to the file
+          FILE* outlogFILE = fopen((this->logFILE).c_str(), "a");
+          if (outlogFILE != NULL) {
+            fprintf(outlogFILE, "%s\n", toLog.c_str());
+            fflush(outlogFILE);
+            fclose(outlogFILE);
+          } else {
+            std::cerr << "Failed to open log file" << std::endl;
+          }
         }
         // Print the message to console
         std::cout << toLog << std::endl;
@@ -79,9 +84,10 @@ class RobotLOG {
   // No-arg constructor
   RobotLOG() : worker(&RobotLOG::taskEntry, this) { logstofile = false; }
 
-  // Constructor
-  RobotLOG(const std::string &logFile)
-      : logStream(logFile, std::ios::app), worker(&RobotLOG::taskEntry, this) {}
+  RobotLOG(const std::string &logFileLoc) : worker(&RobotLOG::taskEntry, this) {
+    logstofile = true;
+    this->logFILE = "/usd/" + logFileLoc;
+  }
 
   // Destructor
   ~RobotLOG() {
@@ -104,11 +110,10 @@ class RobotLOG {
 
   // Log method
   template <typename T>
-  void log( const T &message) {
+  void log(const T &message) {
     std::lock_guard<pros::Mutex> lock(queueMutex);
     std::ostringstream oss;
-    oss << pros::micros() << "μs - [" << levelToString(INFO) << "] "
-        << message;
+    oss << pros::micros() << "μs - [" << levelToString(INFO) << "] " << message;
     logQueue.push(oss.str());
   }
 
@@ -118,7 +123,6 @@ class RobotLOG {
     if (worker.get_state() == pros::E_TASK_STATE_RUNNING) {
       worker.remove();  // Remove the task from the task scheduler
     }
-    logStream.close();  // Close the log file
   }
 };
 
