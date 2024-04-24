@@ -24,19 +24,17 @@ void initialize() {
   logger.debug("This is a debug message");
   logger.warning("This is a warning message");
   logger.error("This is an error message");
-  logger.error(1);
-  //logger.error("one" + "error");
+  logger.info(1);
+  logger.info(1.0);
+  logger.info('a');
+  logger.info(true);
+  logger.info(std::string("Hello") + " World");
+  logger.info(uint32_t(1));
 
-  // // Test Data Types
-  // logger.info("Testing data types");
-  // logger.info("int: " + 1);
-  // logger.info("float: " + 1.0f);
-  // logger.info("double: " + 1.0);
-  // logger.info("char: " + 'a');
-  // logger.info("bool: " + true);
-  // logger.info("string: " + "Hello, World!");
-
-
+  // spam the log
+  for (int i = 0; i < 100000; i++) {
+    logger.info(i);
+  }
 
 }
 /**

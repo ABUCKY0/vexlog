@@ -3,6 +3,7 @@
 
 #include <atomic>   // For std::atomic
 #include <fstream>  // For std::ofstream
+#include <iostream> // For std::cout
 #include <mutex>    // For std::mutex
 #include <queue>    // For std::queue
 #include <sstream>  // For std::ostringstream
@@ -110,7 +111,7 @@ class RobotLOG {
   std::atomic<bool> isTakingNewLogs{
       true};  // Flag indicating whether the logger is taking new logs
   std::atomic<bool> logstofile{
-      false};  // Flag indicating whether logs should be written to file
+      true};  // Flag indicating whether logs should be written to file
   std::string logFilePath;        // Path to the log file
   std::ofstream logFile;          // Output stream for writing logs to file
   std::queue<logEntry> logQueue;  // Queue of logs to be written to file
@@ -138,12 +139,11 @@ class RobotLOG {
                                    // has started
     while (true) {
       if (this->logQueue.empty()) {
-        pros::delay(30);  // Delay for 5 milliseconds if the queue is empty
+        pros::delay(2);  // Delay for 5 milliseconds if the queue is empty
         continue;
       }
       logMutex.take(0);  // Take the mutex to access the log queue
-      logEntry message =
-          logQueue.front();  // Get the frontmost log entry from the queue
+      logEntry message = logQueue.front();  // Get the frontmost log entry from the queue
       logQueue.pop();        // Remove the frontmost log entry from the queue
 
       // Format the log message
@@ -181,13 +181,12 @@ class RobotLOG {
       if (pos != std::string::npos) {
         formattedMessage.replace(pos, 2, line);
       }
-      // if (logstofile && logFile.is_open()) {
-      //   logFile << formattedMessage << std::endl;
-      // }
-      cout << formattedMessage
-           << std::endl;  // Print the log message to the console
+      if (true) {
+        logFile << formattedMessage << std::endl;
+        logFile.flush();
+      }
+      cout << formattedMessage << std::endl;  // Print the log message to the console
       logMutex.give();
-      pros::delay(15);  // Delay for 15 milliseconds
     }
   }
 
@@ -204,7 +203,16 @@ class RobotLOG {
   RobotLOG(const std::string& logFileLoc) : worker(&RobotLOG::taskEntry, this) {
     logstofile = true;
     this->logFilePath = "/usd/" + logFileLoc;
-    this->logQueue = std::queue<logEntry>();
+    this->logFile.open(logFilePath.c_str(), std::ios::app);
+    // Check if the log file opened
+    if (!logFile.is_open()) {
+      std::cerr << "Failed to open log file: " << logFilePath << std::endl;
+      logstofile = false;
+    }
+    else {
+      std::cout << "Log file opened: " << logFilePath << std::endl;
+    }
+
   }
 
   /**
@@ -242,7 +250,6 @@ class RobotLOG {
     std::string msg = msgStream.str();  // Get the string from the stream
 
     this->logQueue.push(logEntry(file, level, msg, function, line));
-    cout << "Added log to queue" << endl;
   }
 
   /**
