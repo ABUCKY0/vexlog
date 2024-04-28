@@ -4,39 +4,16 @@
 
 #include "robotlog/robotlog.h"
 
-using namespace LOG;
 using namespace std;
 
 
-  RobotLOG logger("logger.txt");
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-void initialize() {
-  
-  logger.log(INFO, std::string("Hello from " + std::string(__FILE__) +
-                               " initalize()"));
-
-  logger.info("Hello from initialize()");
-  logger.debug("This is a debug message");
-  logger.warning("This is a warning message");
-  logger.error("This is an error message");
-  logger.info(1);
-  logger.info(1.0);
-  logger.info('a');
-  logger.info(true);
-  logger.info(std::string("Hello") + " World");
-  logger.info(uint32_t(1));
-
-  // spam the log
-  for (int i = 0; i < 100000; i++) {
-    logger.info(i);
-  }
-
-}
+void initialize() {}
 /**
  * Runs while the robot is in the disabled state of Field Management System or
  * the VEX Competition Switch, following either autonomous or opcontrol. When
