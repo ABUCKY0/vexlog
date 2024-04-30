@@ -2,7 +2,7 @@
 #define COLORS_H
 
 #include <string>
-namespace LOG {
+namespace ROBOTLOG {
 class Colors {
  public:
   // Regular Colors
@@ -80,62 +80,63 @@ class Colors {
   }
 };
 
-const std::string Colors::RESET = "\033[0m";
-const std::string Colors::BLACK = "\033[30m";
-const std::string Colors::RED = "\033[31m";
-const std::string Colors::GREEN = "\033[32m";
-const std::string Colors::YELLOW = "\033[33m";
-const std::string Colors::BLUE = "\033[34m";
-const std::string Colors::MAGENTA = "\033[35m";
-const std::string Colors::CYAN = "\033[36m";
-const std::string Colors::WHITE = "\033[37m";
-const std::string Colors::BOLD_BLACK = "\033[1m\033[30m";
-const std::string Colors::BOLD_RED = "\033[1m\033[31m";
-const std::string Colors::BOLD_GREEN = "\033[1m\033[32m";
-const std::string Colors::BOLD_YELLOW = "\033[1m\033[33m";
-const std::string Colors::BOLD_BLUE = "\033[1m\033[34m";
-const std::string Colors::BOLD_MAGENTA = "\033[1m\033[35m";
-const std::string Colors::BOLD_CYAN = "\033[1m\033[36m";
-const std::string Colors::BOLD_WHITE = "\033[1m\033[37m";
-const std::string Colors::UBLACK = "\033[4m\033[30m";
-const std::string Colors::URED = "\033[4m\033[31m";
-const std::string Colors::UGREEN = "\033[4m\033[32m";
-const std::string Colors::UYELLOW = "\033[4m\033[33m";
-const std::string Colors::UBLUE = "\033[4m\033[34m";
-const std::string Colors::UMAGENTA = "\033[4m\033[35m";
-const std::string Colors::UCYAN = "\033[4m\033[36m";
-const std::string Colors::UWHITE = "\033[4m\033[37m";
-const std::string Colors::BG_BLACK = "\033[40m";
-const std::string Colors::BG_RED = "\033[41m";
-const std::string Colors::BG_GREEN = "\033[42m";
-const std::string Colors::BG_YELLOW = "\033[43m";
-const std::string Colors::BG_BLUE = "\033[44m";
-const std::string Colors::BG_MAGENTA = "\033[45m";
-const std::string Colors::BG_CYAN = "\033[46m";
-const std::string Colors::BG_WHITE = "\033[47m";
-const std::string Colors::HI_BLACK = "\033[0;90m";
-const std::string Colors::HI_RED = "\033[0;91m";
-const std::string Colors::HI_GREEN = "\033[0;92m";
-const std::string Colors::HI_YELLOW = "\033[0;93m";
-const std::string Colors::HI_BLUE = "\033[0;94m";
-const std::string Colors::HI_MAGENTA = "\033[0;95m";
-const std::string Colors::HI_CYAN = "\033[0;96m";
-const std::string Colors::HI_WHITE = "\033[0;97m";
-const std::string Colors::BOLD_HI_BLACK = "\033[1;90m";
-const std::string Colors::BOLD_HI_RED = "\033[1;91m";
-const std::string Colors::BOLD_HI_GREEN = "\033[1;92m";
-const std::string Colors::BOLD_HI_YELLOW = "\033[1;93m";
-const std::string Colors::BOLD_HI_BLUE = "\033[1;94m";
-const std::string Colors::BOLD_HI_MAGENTA = "\033[1;95m";
-const std::string Colors::BOLD_HI_CYAN = "\033[1;96m";
-const std::string Colors::BOLD_HI_WHITE = "\033[1;97m";
-const std::string Colors::HI_BG_BLACK = "\033[0;100m";
-const std::string Colors::HI_BG_RED = "\033[0;101m";
-const std::string Colors::HI_BG_GREEN = "\033[0;102m";
-const std::string Colors::HI_BG_YELLOW = "\033[0;103m";
-const std::string Colors::HI_BG_BLUE = "\033[0;104m";
-const std::string Colors::HI_BG_MAGENTA = "\033[0;105m";
-const std::string Colors::HI_BG_CYAN = "\033[0;106m";
-const std::string Colors::HI_BG_WHITE = "\033[0;107m";
+const std::string ROBOTLOG::Colors::RESET = "\033[0;0m";
+const std::string ROBOTLOG::Colors::BLACK = "\033[0;30m";
+const std::string ROBOTLOG::Colors::RED = "\033[0;31m";
+const std::string ROBOTLOG::Colors::GREEN = "\033[0;32m";
+const std::string ROBOTLOG::Colors::YELLOW = "\033[0;33m";
+const std::string ROBOTLOG::Colors::BLUE = "\033[0;34m";
+const std::string ROBOTLOG::Colors::MAGENTA = "\033[0;35m";
+const std::string ROBOTLOG::Colors::CYAN = "\033[0;36m";
+const std::string ROBOTLOG::Colors::WHITE = "\033[0;37m";
+const std::string ROBOTLOG::Colors::BOLD_BLACK = "\033[1m\033[30m";
+const std::string ROBOTLOG::Colors::BOLD_RED = "\033[1m\033[31m";
+const std::string ROBOTLOG::Colors::BOLD_GREEN = "\033[1m\033[32m";
+const std::string ROBOTLOG::Colors::BOLD_YELLOW = "\033[1m\033[33m";
+const std::string ROBOTLOG::Colors::BOLD_BLUE = "\033[1m\033[34m";
+const std::string ROBOTLOG::Colors::BOLD_MAGENTA = "\033[1m\033[35m";
+const std::string ROBOTLOG::Colors::BOLD_CYAN = "\033[1m\033[36m";
+const std::string ROBOTLOG::Colors::BOLD_WHITE = "\033[1m\033[37m";
+const std::string ROBOTLOG::Colors::UBLACK = "\033[4m\033[30m";
+const std::string ROBOTLOG::Colors::URED = "\033[4m\033[31m";
+const std::string ROBOTLOG::Colors::UGREEN = "\033[4m\033[32m";
+const std::string ROBOTLOG::Colors::UYELLOW = "\033[4m\033[33m";
+const std::string ROBOTLOG::Colors::UBLUE = "\033[4m\033[34m";
+const std::string ROBOTLOG::Colors::UMAGENTA = "\033[4m\033[35m";
+const std::string ROBOTLOG::Colors::UCYAN = "\033[4m\033[36m";
+const std::string ROBOTLOG::Colors::UWHITE = "\033[4m\033[37m";
+const std::string ROBOTLOG::Colors::BG_BLACK = "\033[40m";
+const std::string ROBOTLOG::Colors::BG_RED = "\033[41m";
+const std::string ROBOTLOG::Colors::BG_GREEN = "\033[42m";
+const std::string ROBOTLOG::Colors::BG_YELLOW = "\033[43m";
+const std::string ROBOTLOG::Colors::BG_BLUE = "\033[44m";
+const std::string ROBOTLOG::Colors::BG_MAGENTA = "\033[45m";
+const std::string ROBOTLOG::Colors::BG_CYAN = "\033[46m";
+const std::string ROBOTLOG::Colors::BG_WHITE = "\033[47m";
+const std::string ROBOTLOG::Colors::HI_BLACK = "\033[0;90m";
+const std::string ROBOTLOG::Colors::HI_RED = "\033[0;91m";
+const std::string ROBOTLOG::Colors::HI_GREEN = "\033[0;92m";
+const std::string ROBOTLOG::Colors::HI_YELLOW = "\033[0;93m";
+const std::string ROBOTLOG::Colors::HI_BLUE = "\033[0;94m";
+const std::string ROBOTLOG::Colors::HI_MAGENTA = "\033[0;95m";
+const std::string ROBOTLOG::Colors::HI_CYAN = "\033[0;96m";
+const std::string ROBOTLOG::Colors::HI_WHITE = "\033[0;97m";
+const std::string ROBOTLOG::Colors::BOLD_HI_BLACK = "\033[1;90m";
+const std::string ROBOTLOG::Colors::BOLD_HI_RED = "\033[1;91m";
+const std::string ROBOTLOG::Colors::BOLD_HI_GREEN = "\033[1;92m";
+const std::string ROBOTLOG::Colors::BOLD_HI_YELLOW = "\033[1;93m";
+const std::string ROBOTLOG::Colors::BOLD_HI_BLUE = "\033[1;94m";
+const std::string ROBOTLOG::Colors::BOLD_HI_MAGENTA = "\033[1;95m";
+const std::string ROBOTLOG::Colors::BOLD_HI_CYAN = "\033[1;96m";
+const std::string ROBOTLOG::Colors::BOLD_HI_WHITE = "\033[1;97m";
+const std::string ROBOTLOG::Colors::HI_BG_BLACK = "\033[0;100m";
+const std::string ROBOTLOG::Colors::HI_BG_RED = "\033[0;101m";
+const std::string ROBOTLOG::Colors::HI_BG_GREEN = "\033[0;102m";
+const std::string ROBOTLOG::Colors::HI_BG_YELLOW = "\033[0;103m";
+const std::string ROBOTLOG::Colors::HI_BG_BLUE = "\033[0;104m";
+const std::string ROBOTLOG::Colors::HI_BG_MAGENTA = "\033[0;105m";
+const std::string ROBOTLOG::Colors::HI_BG_CYAN = "\033[0;106m";
+const std::string ROBOTLOG::Colors::HI_BG_WHITE = "\033[0;107m";
+
 }  // namespace LOG
 #endif
