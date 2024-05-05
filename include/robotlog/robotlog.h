@@ -274,7 +274,7 @@ public:
    * @brief Construct a new LOGGER object
    * 
    */
-  LOGGER() : worker(&taskEntry, this) {
+  LOGGER() : worker(&taskEntry, this, "(VexLog) LogProcessor") {
     this->addlog(Level::debug, "Initalized VexLog @ " + std::to_string(pros::millis()) + "ms");
   }
 
