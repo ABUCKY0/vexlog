@@ -67,17 +67,21 @@ void opcontrol() {
   //         pros::delay(1);
   //     }
   double total = 0;
-  for (int i = 0; i < 1000; i++) {
-    auto start = chrono::high_resolution_clock::now();
-    logger.info(i);
-    auto end = chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed = end - start;
-    total += elapsed.count();
-    pros::delay(10);
-  }
-  logger.debug("For each time a log function is called, it took " + std::to_string(total*1000) + " microseconds on average before finishing");
-  logger.log(ROBOTLOG::Level(7), "This is a log message with a custom level of 7");
+//   for (int i = 0; i < 1000; i++) {
+//     auto start = chrono::high_resolution_cloc
+//     auto start = chrono::high_resolution_clock::nowk::now();
+    // logger.info(i);
+    // auto end = chrono::high_resolution_clock::now();
+    // std::chrono::duration<double> elapsed = end - start;
+    // total += elapsed.count();
+    // pros::delay(10);
+//   }
+//   logger.debug("For each time a log function is called, it took " + std::to_string(total*1000) + " microseconds on average before finishing");
+//   logger.log(ROBOTLOG::Level(7), "This is a log message with a custom level of 7");
+int i = 0;
 while (true) {
-    pros::delay(10000);
+    logger.info("This is an info message"+ std::to_string(i));
+    i++;
+    pros::delay(10);
 }
 }

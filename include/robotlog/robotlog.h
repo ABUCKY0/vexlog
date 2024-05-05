@@ -249,7 +249,7 @@ private:
         
       }
 
-      std::ofstream file(this->filePath.value_or(""));
+      //std::ofstream file(this->filePath.value_or(""));
       constexpr static char maxlogwrites = 10;
       long availableLogs = this->logs.size();
       short loopindices = 0;
@@ -262,7 +262,7 @@ private:
       for (int i = 0; i < loopindices; i++) {
         LogMessage msg = this->logs.front();
         std::string logmsg = msg.format(this->logFormat.value_or("<CBLEVEL> <FILE>:<LINE> - <MESSAGE>"));
-        std::cout << logmsg << std::endl << std::flush;
+        std::cout << logmsg << "\n";
         this->logs.pop();
       }
     pros::delay(5);
