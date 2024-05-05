@@ -195,25 +195,28 @@ public:
       return this->getMessage();
     }
 
-    formatString = std::regex_replace(formatString, std::regex("<LEVEL>"), // Level Only
-                                      this->getLevelAsString());
-    formatString = std::regex_replace(formatString, std::regex("<BLEVEL>"), // Brackets no Color
-                                      this->getLevelAsStringBrackets());
     formatString =
-        std::regex_replace(formatString, std::regex("<CLEVEL>"), // Color and Level
-                           this->getLevelAsStringWithColors(
-                               COLOR_ERR, COLOR_WARN, COLOR_INFO, COLOR_DEBUG));
-    formatString =
-        std::regex_replace(formatString, std::regex("<CBLEVEL>"), // Color and Brackets
-                           this->getLevelAsStringFull(COLOR_ERR, COLOR_WARN,
-                                                      COLOR_INFO, COLOR_DEBUG));
+        std::regex_replace(formatString, std::regex("<LEVEL>"), // Level Only
+                           this->getLevelAsString());
+    formatString = std::regex_replace(
+        formatString, std::regex("<BLEVEL>"), // Brackets no Color
+        this->getLevelAsStringBrackets());
+    formatString = std::regex_replace(
+        formatString, std::regex("<CLEVEL>"), // Color and Level
+        this->getLevelAsStringWithColors(COLOR_ERR, COLOR_WARN, COLOR_INFO,
+                                         COLOR_DEBUG));
+    formatString = std::regex_replace(
+        formatString, std::regex("<CBLEVEL>"), // Color and Brackets
+        this->getLevelAsStringFull(COLOR_ERR, COLOR_WARN, COLOR_INFO,
+                                   COLOR_DEBUG));
 
+    formatString = std::regex_replace(formatString, std::regex("<FILE>"),
+                                      this->getFile()); // File
+    formatString = std::regex_replace(formatString, std::regex("<LINE>"),
+                                      this->getLine()); // Line
     formatString =
-        std::regex_replace(formatString, std::regex("<FILE>"), this->getFile()); //File
-    formatString =
-        std::regex_replace(formatString, std::regex("<LINE>"), this->getLine()); // Line
-    formatString = std::regex_replace(formatString, std::regex("<MESSAGE>"), //Message
-                                      this->getMessage());
+        std::regex_replace(formatString, std::regex("<MESSAGE>"), // Message
+                           this->getMessage());
 
     return formatString;
   }
@@ -308,6 +311,25 @@ public:
     messageAsString << message;
     LogMessage lmsg(level, messageAsString.str(), file, line);
     this->logs.push(lmsg);
+  }
+
+  /**
+   * @brief Change the Format String
+   *
+   * Changes the format string used to format log messages. The format string
+   * can include <LEVEL>, <CLEVEL>, <BLEVEL>, <CBLEVEL>, <FILE>, <LINE>, and
+   * <MESSAGE>. See the README for more information.
+   * @param formatString the new format string
+   * @return true if the format string was successfully updated, false otherwise
+   */
+  bool setFormatString(std::string formatString) {
+    if (this->updateLogFormat.take(5000) == true) {
+
+      this->logFormat = std::make_optional(formatString);
+      this->updateLogFormat.give();
+      return true;
+    }
+    return false;
   }
 };
 } // namespace ROBOTLOG
