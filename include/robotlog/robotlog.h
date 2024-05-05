@@ -131,7 +131,7 @@ public:
       return "";
       break;
     default:
-      return COLOR_DEBUG + "["+std::to_string(this->level.value()) + "]" + Colors::RESET;
+      return Colors::WHITE + "["+std::to_string(this->level.value()) + "]" + Colors::RESET;
     }
     return "";
   }
@@ -157,7 +157,7 @@ public:
     case DATA:
       return "";
       break;
-    default: return COLOR_DEBUG + "["+std::to_string(this->level.value()) + "]" + Colors::RESET;
+    default: return Colors::WHITE + "["+std::to_string(this->level.value()) + "]" + Colors::RESET;
     }
     
     return "";
@@ -354,6 +354,16 @@ public:
  */
 #define error(message) \
   LOGGER::addlog(ROBOTLOG::Level::ERROR, message, __FILENAME__, __LINE__)
+
+/**
+ * @brief Macro to generate log entries with log level DATA. Only prints the message, no formatting.
+ *
+ * Used when raw data should be printed/saved. Does not add any extra formatting to the message on the console or in the file.
+ * @param message Log message
+ * @example data("This is a data-only message");
+ */
+#define data(message) \
+  LOGGER::addlog(ROBOTLOG::Level::DATA, message, __FILENAME__, __LINE__)
 
 
 

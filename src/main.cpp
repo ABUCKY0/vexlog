@@ -76,6 +76,7 @@ void opcontrol() {
     pros::delay(10);
   }
   logger.debug("For each time a log function is called, it took " + std::to_string(total*1000) + " microseconds on average before finishing");
+  logger.log(ROBOTLOG::Level(7), "This is a log message with a custom level of 7");
 while (true) {
     pros::delay(10000);
 }
