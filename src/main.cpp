@@ -82,6 +82,6 @@ int i = 0;
 while (true) {
     logger.info("This is an info message"+ std::to_string(i));
     i++;
-    pros::delay(10);
+    pros::delay(2);
 }
 }
