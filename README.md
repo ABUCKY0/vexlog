@@ -40,8 +40,23 @@ There are six (define) methods (not addlog) that are meant to be used in a user 
 
 The above are (pretty) self explanatory, with message being the message you want to log. 
 
+## Format String.
+
+I make use of what I call a format string to allow for more configuration of the logging output. There are a couple different format substrings that you can make use of
 
 
+| Format Sub-string | Description                                                      |
+| ----------------- | ---------------------------------------------------------------- |
+| <LEVEL>           | A String representation of the Log Level.                        |
+| <CLEVEL>          | A String representation of the Log Level, Colorized.             |
+| <BLEVEL>          | A String representation of the Log Level, with brackets.         |
+| <CBLEVEL>         | A String reprentation of the Log Level, Colorized with Brackets. |
+| <FILE>            | The Filename that a log was written from.                        |
+| <LINE>            | The line number a log was written from.                          |
+| <MESSAGE>         | The message that is to be written to the console.                |
+
+
+An example string (and the default string included in the library) could be `"<CBLEVEL> <FILE>:<LINE> - <MESSAGE>"`
 
 ## Nerd Statistics
 I timed it, and (if I set it up right) it would seem that when you call a log function from above, it usually takes about 10 microseconds to run. I'd consider that pretty good. This is because I make a LogMessage struct, then add this struct to the queue. A seperate task reads this message and prints it to the console. I don't know how using a seperate task affects performance though. 
