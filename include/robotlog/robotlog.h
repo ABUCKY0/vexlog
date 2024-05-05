@@ -15,6 +15,9 @@
 #include <sstream>
 #include <string>
 
+
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+
 namespace ROBOTLOG {
 enum Level {
   DEBUG = 0,
@@ -80,9 +83,9 @@ public:
     case ERR:
       return "ERR";
     case DATA:
-      return "DATA";
-    default:
       return "";
+    default:
+      return std::to_string(this->level.value());
     }
     
     return "";
@@ -99,11 +102,11 @@ public:
     case ERR:
       return "[ERR]";
     case DATA:
-      return "[DATA]";
+      return "";
     default:
       return "";
     }
-    return "";
+    return "["+std::to_string(this->level.value()) + "]";
   }
 
   std::string getLevelAsStringWithColors(
@@ -128,7 +131,7 @@ public:
       return "";
       break;
     default:
-      return "";
+      return COLOR_DEBUG + "["+std::to_string(this->level.value()) + "]" + Colors::RESET;
     }
     return "";
   }
@@ -140,7 +143,7 @@ public:
                        std::string COLOR_DEBUG = ROBOTLOG::Colors::MAGENTA) {
     switch (this->level.value()) {
     case DEBUG:
-      return "DEBUG";
+      return COLOR_DEBUG + "[DEBUG]" + Colors::RESET;
       break;
     case INFO:
       return COLOR_INFO + "[INFO]" + Colors::RESET;
@@ -154,7 +157,7 @@ public:
     case DATA:
       return "";
       break;
-    default: return "";
+    default: return COLOR_DEBUG + "["+std::to_string(this->level.value()) + "]" + Colors::RESET;
     }
     
     return "";
@@ -164,7 +167,7 @@ public:
                      std::string COLOR_ERR = ROBOTLOG::Colors::RED,
                      std::string COLOR_WARN = ROBOTLOG::Colors::YELLOW,
                      std::string COLOR_INFO = ROBOTLOG::Colors::WHITE,
-                     std::string COLOR_DEBUG = "") {
+                     std::string COLOR_DEBUG = ROBOTLOG::Colors::MAGENTA) {
     /*
     ! Characteristics of a Format String
     * <LEVEL> - Log Level
@@ -242,11 +245,11 @@ private:
   void workerTask() {
     while (true) {
       if (this->logs.empty()) {
-        pros::delay(2);
-        continue;
+        pros::delay(10);
+        
       }
 
-      std::optional<std::ofstream> file(this->filePath);
+      std::ofstream file(this->filePath.value_or(""));
       constexpr static char maxlogwrites = 10;
       long availableLogs = this->logs.size();
       short loopindices = 0;
@@ -259,20 +262,37 @@ private:
       for (int i = 0; i < loopindices; i++) {
         LogMessage msg = this->logs.front();
         std::string logmsg = msg.format(this->logFormat.value_or("<CBLEVEL> <FILE>:<LINE> - <MESSAGE>"));
-        std::cout << logmsg << std::endl;
+        std::cout << logmsg << std::endl << std::flush;
         this->logs.pop();
       }
-    pros::delay(10);
+    pros::delay(5);
     }
   }
 
 public:
+  /**
+   * @brief Construct a new LOGGER object
+   * 
+   */
   LOGGER() : worker(&taskEntry, this) {
-    std::cout << "LOGGER INIT";
+    this->addlog(Level::debug, "Initalized VexLog @ " + std::to_string(pros::millis()) + "ms");
   }
 
+  /**
+   * @brief Add a log message to the queue
+   * 
+   * Converts the input T message to a string, then
+   * Constructs a new LogMessage object with the level, message, file, and line. 
+   * Then it pushes the LogMessage object to the queue.
+   * 
+   * @tparam T any type that can be converted to a string
+   * @param level Log level, can be DEBUG, INFO, WARNING, ERROR, DATA
+   * @param message The message to log
+   * @param file a string name of the file the log was called from
+   * @param line the line number the log was called from
+   */
   template <typename T>
-  void addlog(Level level, const T& message, std::string file = __FILE__, int line = __LINE__) {
+  void addlog(Level level, const T& message, std::string file = __FILENAME__, int line = __LINE__) {
     std::ostringstream messageAsString;
     messageAsString << message;
     LogMessage lmsg(level, messageAsString.str(), file, line);
@@ -283,41 +303,58 @@ public:
 
 /**
  * Macro to generate log entries
+ *
+ * Used to generate log entries with a specified log level. Automatically include the filename and line number in the log message.
+ *
  * @param level Log level
  * @param message Log message
 */
 #define log(level, message) \
-  LOGGER::addlog(level, message, __FILE__, __LINE__)
+  LOGGER::addlog(level, message, __FILENAME__, __LINE__)
 
 /**
- * Macro to generate log entries with log level DEBUG
+ * @brief Macro to generate log entries with log level DEBUG
+ * 
+ * Used when a debug message is to be logged. Automatically include the filename and line number in the debug message.
+ *
  * @param message Log message
  * @example debug("This is a debug message");
  */
 #define info(message) \
-  LOGGER::addlog(ROBOTLOG::Level::INFO, message, __FILE__, __LINE__)
+  LOGGER::addlog(ROBOTLOG::Level::INFO, message, __FILENAME__, __LINE__)
 
 /**
- * Macro to generate log entries with log level INFO
+ * @brief Macro to generate log entries with log level INFO
+ *
+ * Used when an info message is to be logged. Automatically include the filename and line number in the info message.
+ *
  * @param message Log message
  * @example info("This is an info message");
  */
 #define debug(message) \
-  LOGGER::addlog(ROBOTLOG::Level::DEBUG, message, __FILE__, __LINE__)
+  LOGGER::addlog(ROBOTLOG::Level::DEBUG, message, __FILENAME__, __LINE__)
 
 /**
- * Macro to generate log entries with log level WARNING
+ * @brief Macro to generate log entries with log level WARNING
+ *
+ * Used when a warning is encountered. Automatically include the filename and line number in the warning message.
+ *
  * @param message Log message
  * @example warning("This is a warning message");
  */
 #define warning(message) \
-  LOGGER::addlog(ROBOTLOG::Level::WARNING, message, __FILE__, __LINE__)
+  LOGGER::addlog(ROBOTLOG::Level::WARNING, message, __FILENAME__, __LINE__)
 
 /**
- * Macro to generate log entries with log level ERROR
+ * @brief Macro to generate log entries with log level ERROR
+ *
+ * Used when an error is encountered. Automatically include the filename and line number in the error message.
  * @param message Log message
  * @example error("This is an error message");
  */
 #define error(message) \
-  LOGGER::addlog(ROBOTLOG::Level::ERROR, message, __FILE__, __LINE__)
+  LOGGER::addlog(ROBOTLOG::Level::ERROR, message, __FILENAME__, __LINE__)
+
+
+
 #endif
