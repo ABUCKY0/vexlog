@@ -14,7 +14,9 @@ ROBOTLOG::LOGGER logger;
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-void initialize() {}
+void initialize() {
+    logger.setFormatString("<CLEVEL> - <MESSAGE>");
+}
 /**
  * Runs while the robot is in the disabled state of Field Management System or
  * the VEX Competition Switch, following either autonomous or opcontrol. When
