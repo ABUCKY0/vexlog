@@ -47,13 +47,13 @@ I make use of what I call a format string to allow for more configuration of the
 
 | Format Sub-string | Description                                                      |
 | ----------------- | ---------------------------------------------------------------- |
-| <LEVEL>           | A String representation of the Log Level.                        |
-| <CLEVEL>          | A String representation of the Log Level, Colorized.             |
-| <BLEVEL>          | A String representation of the Log Level, with brackets.         |
-| <CBLEVEL>         | A String reprentation of the Log Level, Colorized with Brackets. |
-| <FILE>            | The Filename that a log was written from.                        |
-| <LINE>            | The line number a log was written from.                          |
-| <MESSAGE>         | The message that is to be written to the console.                |
+| \<LEVEL>           | A String representation of the Log Level.                        |
+| \<CLEVEL>          | A String representation of the Log Level, Colorized.             |
+| \<BLEVEL>          | A String representation of the Log Level, with brackets.         |
+| \<CBLEVEL>         | A String reprentation of the Log Level, Colorized with Brackets. |
+| \<FILE>            | The Filename that a log was written from.                        |
+| \<LINE>            | The line number a log was written from.                          |
+| \<MESSAGE>         | The message that is to be written to the console.                |
 
 
 An example string (and the default string included in the library) could be `"<CBLEVEL> <FILE>:<LINE> - <MESSAGE>"`
