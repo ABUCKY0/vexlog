@@ -1,7 +1,12 @@
 #include "main.h"
 
 #include <chrono>
+#include <math.h>
+#include <string>
+#include <vector>
 
+// math
+#include <cmath>
 #include "robotlog/robotlog.h"
 
 using namespace std;
@@ -15,7 +20,7 @@ ROBOTLOG::LOGGER logger;
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-    logger.setFormatString("<CLEVEL> - <MESSAGE>");
+    //logger.setFormatString("<CLEVEL> - <MESSAGE>");
 }
 /**
  * Runs while the robot is in the disabled state of Field Management System or
@@ -82,7 +87,8 @@ void opcontrol() {
 //   logger.log(ROBOTLOG::Level(7), "This is a log message with a custom level of 7");
 int i = 0;
 while (true) {
-    logger.info("This is an info message"+ std::to_string(i));
+    //logger.info("This is an info message"+ std::to_string(i));
+    logger.log(ROBOTLOG::Level(7), "This is a log message with a custom level of 7");
     i++;
     pros::delay(2);
 }

@@ -331,78 +331,153 @@ public:
     }
     return false;
   }
+
+  // Moved Macros to Inline Functions
+
+  /** @brief Log a message with a specified log level
+   *
+   * Log a message with a specified log level. Automatically include the filename
+   * and line number in the log message.
+   * @param level Log level
+   * @param message Log message
+  */
+  inline void ilog(ROBOTLOG::Level level, std::string message, std::string file,
+                   int line) {
+    this->addlog(level, message, file, line);
+  }
+
+  /** @brief Log a message with log level INFO
+   *
+   * Log a message with log level INFO. Automatically include the filename
+   * and line number in the log message.
+   * @param message Log message
+  */
+  inline void info(std::string message) {
+    this->addlog(ROBOTLOG::Level::INFO, message, __FILENAME__, __LINE__);
+  }
+
+  /** @brief Log a message with log level DEBUG
+   *
+   * Log a message with log level DEBUG. Automatically include the filename
+   * and line number in the log message.
+   * @param message debug message
+  */
+  inline void debug(std::string message) {
+    this->addlog(ROBOTLOG::Level::DEBUG, message, __FILENAME__, __LINE__);
+  }
+
+  /** @brief Log a message with log level WARNING
+   *
+   * Log a message with log level WARNING. Automatically include the filename
+   * and line number in the log message.
+   * @param message Log message
+  */
+  inline void warning(std::string message) {
+    this->addlog(ROBOTLOG::Level::WARNING, message, __FILENAME__, __LINE__);
+  }
+
+  /** @brief Log a message with log level ERROR
+   *
+   * Log a message with log level ERROR. Automatically include the filename
+   * and line number in the log message.
+   * @param message Log message
+  */
+  inline void error(std::string message) {
+    this->addlog(ROBOTLOG::Level::ERROR, message, __FILENAME__, __LINE__);
+  }
+
+  /** @brief Log a message with log level DATA
+   *
+   * Log a message with log level DATA. Automatically include the filename
+   * and line number in the log message.
+   * @param message Log message
+  */
+  inline void data(std::string message) {
+    this->addlog(ROBOTLOG::Level::DATA, message, __FILENAME__, __LINE__);
+  }
+
+
+  /**
+   * @brief Set the Console Log Level
+   *
+   * Set the log level for the console. Only log messages with a level greater
+   * than or equal to the console log level will be printed to the console.
+   * @param level the new console log level
+   */
+  void setConsoleLogLevel(ROBOTLOG::Level level) { this->consoleLogLevel = level; }
+
 };
-} // namespace ROBOTLOG
 
-/**
- * Macro to generate log entries
- *
- * Used to generate log entries with a specified log level. Automatically
- * include the filename and line number in the log message.
- *
- * @param level Log level
- * @param message Log message
- */
-#define log(level, message)                                                    \
-  LOGGER::addlog(level, message, __FILENAME__, __LINE__)
 
-/**
- * @brief Macro to generate log entries with log level DEBUG
- *
- * Used when a debug message is to be logged. Automatically include the filename
- * and line number in the debug message.
- *
- * @param message Log message
- * @example debug("This is a debug message");
- */
-#define info(message)                                                          \
-  LOGGER::addlog(ROBOTLOG::Level::INFO, message, __FILENAME__, __LINE__)
+// /**
+//  * Macro to generate log entries
+//  *
+//  * Used to generate log entries with a specified log level. Automatically
+//  * include the filename and line number in the log message.
+//  *
+//  * @param level Log level
+//  * @param message Log message
+//  */
+ #define log(level, message) LOGGER::ilog(level, message, __FILENAME__, __LINE__)
 
-/**
- * @brief Macro to generate log entries with log level INFO
- *
- * Used when an info message is to be logged. Automatically include the filename
- * and line number in the info message.
- *
- * @param message Log message
- * @example info("This is an info message");
- */
-#define debug(message)                                                         \
-  LOGGER::addlog(ROBOTLOG::Level::DEBUG, message, __FILENAME__, __LINE__)
+// /**
+//  * @brief Macro to generate log entries with log level INFO
+//  *
+//  * Used when a info message is to be logged. Automatically include the filename
+//  * and line number in the debug message.
+//  *
+//  * @param message Log message
+//  * @example info("This is an info message");
+//  */
+#define info(message)  LOGGER::info(message)
 
-/**
- * @brief Macro to generate log entries with log level WARNING
- *
- * Used when a warning is encountered. Automatically include the filename and
- * line number in the warning message.
- *
- * @param message Log message
- * @example warning("This is a warning message");
- */
-#define warning(message)                                                       \
-  LOGGER::addlog(ROBOTLOG::Level::WARNING, message, __FILENAME__, __LINE__)
+// /**
+//  * @brief Macro to generate log entries with log level DEBUG
+//  *
+//  * Used when an debug message is to be logged. Automatically include the filename
+//  * and line number in the info message.
+//  *
+//  * @param message debug message
+//  * @example debug("This is a debug message");
+//  */
+// #define debug(message)                                                         \
+//   LOGGER::addlog(ROBOTLOG::Level::DEBUG, message, __FILENAME__, __LINE__)
 
-/**
- * @brief Macro to generate log entries with log level ERROR
- *
- * Used when an error is encountered. Automatically include the filename and
- * line number in the error message.
- * @param message Log message
- * @example error("This is an error message");
- */
-#define error(message)                                                         \
-  LOGGER::addlog(ROBOTLOG::Level::ERROR, message, __FILENAME__, __LINE__)
+// /**
+//  * @brief Macro to generate log entries with log level WARNING
+//  *
+//  * Used when a warning is encountered. Automatically include the filename and
+//  * line number in the warning message.
+//  *
+//  * @param message Log message
+//  * @example warning("This is a warning message");
+//  */
+// #define warning(message)                                                       \
+//   LOGGER::addlog(ROBOTLOG::Level::WARNING, message, __FILENAME__, __LINE__)
 
-/**
- * @brief Macro to generate log entries with log level DATA. Only prints the
- * message, no formatting.
- *
- * Used when raw data should be printed/saved. Does not add any extra formatting
- * to the message on the console or in the file.
- * @param message Log message
- * @example data("This is a data-only message");
- */
-#define data(message)                                                          \
-  LOGGER::addlog(ROBOTLOG::Level::DATA, message, __FILENAME__, __LINE__)
+// /**
+//  * @brief Macro to generate log entries with log level ERROR
+//  *
+//  * Used when an error is encountered. Automatically include the filename and
+//  * line number in the error message.
+//  * @param message Log message
+//  * @example error("This is an error message");
+//  */
+// #define error(message)                                                         \
+//   LOGGER::addlog(ROBOTLOG::Level::ERROR, message, __FILENAME__, __LINE__)
+
+// /**
+//  * @brief Macro to generate log entries with log level DATA. Only prints the
+//  * message, no formatting.
+//  *
+//  * Used when raw data should be printed/saved. Does not add any extra formatting
+//  * to the message on the console or in the file.
+//  * @param message Log message
+//  * @example data("This is a data-only message");
+//  */
+// #define data(message)                                                          \
+//   LOGGER::addlog(ROBOTLOG::Level::DATA, message, __FILENAME__, __LINE__)
 
 #endif
+
+} // namespace ROBOTLOG
