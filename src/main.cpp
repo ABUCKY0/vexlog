@@ -11,7 +11,7 @@
 
 using namespace std;
 
-ROBOTLOG::LOGGER logger;
+ROBOTLOG::LOGGER logger("/usd/main.txt");
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -88,7 +88,7 @@ void opcontrol() {
 int i = 0;
 while (true) {
     //logger.info("This is an info message"+ std::to_string(i));
-    logger.log(ROBOTLOG::Level(7), "This is a log message with a custom level of 7");
+    logger.rlog(ROBOTLOG::Level(i), "This is a log message with a custom level of i");
     i++;
     pros::delay(2);
 }

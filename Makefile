@@ -27,7 +27,7 @@ EXCLUDE_COLD_LIBRARIES:=
 # TODO: SET TO 1 FOR LIBRARY
 IS_LIBRARY:=1
 LIBNAME:=vexlog
-VERSION:=0.0.1-alpha1
+VERSION:=0.0.1-alpha3
 # EXCLUDE_SRC_FROM_LIB= $(SRCDIR)/unpublishedfile.c
 # this line excludes opcontrol.c and similar files
 EXCLUDE_SRC_FROM_LIB+=$(foreach file, $(SRCDIR)/main,$(foreach cext,$(CEXTS),$(file).$(cext)) $(foreach cxxext,$(CXXEXTS),$(file).$(cxxext)))
