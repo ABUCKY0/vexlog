@@ -17,7 +17,7 @@ jobs:
 
       - name: Run abucky0/pros-build
         id: test
-        uses: abucky0/pros-build@v1.0.0-alpha10
+        uses: abucky0/pros-build@main
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
