@@ -17,7 +17,7 @@ jobs:
 
       - name: Run abucky0/pros-build
         id: test
-        uses: lemlib/pros-build@main
+        uses: lemlib/pros-build@main 
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
