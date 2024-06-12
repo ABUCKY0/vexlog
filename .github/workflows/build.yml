@@ -18,6 +18,9 @@ jobs:
       - name: Run abucky0/pros-build
         id: test
         uses: lemlib/pros-build@main
+        with:
+            copy_readme_and_license_to_include: true
+            lib_folder_name: robotlog
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
