@@ -15,9 +15,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Run abucky0/pros-build
+      - name: Run PROS Build
         id: test
-        uses: lemlib/pros-build@main
+        uses: lemlib/pros-build@v2.0.2
         with:
             copy_readme_and_license_to_include: true
             lib_folder_name: robotlog
